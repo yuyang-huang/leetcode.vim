@@ -38,7 +38,8 @@ function! s:LoadSessionCookie() abort
        return v:false
     endif
 
-    let success = py3eval('leetcode.load_session_cookie("' . g:leetcode_browser . '")')
+    let success = py3eval('leetcode.load_session_cookie("' . g:leetcode_browser . '","'
+                          \ . g:leetcode_browser_cookie_file . '")')
     if success
        echo 'Signed in.'
     endif
@@ -453,7 +454,7 @@ function! s:ProblemSlugFromFileName() abort
         return s:FileNameToSlug(parts[1])
     elseif len(parts) == 2
         if parts[-1] =~# '^\d\+$'
-            " Old style with submission id, e.g. two-sum.1234 
+            " Old style with submission id, e.g. two-sum.1234
             return s:FileNameToSlug(parts[0])
         else
             " There some problems like `面试题59 - II.dui_lie_de_zui_da_zhi_lcof.cpp` in leetcode-cn
@@ -1080,7 +1081,7 @@ function! s:CheckRunCodeTask(timer) abort
     if task_name == 'test_solution' || task_name == 'submit_solution'
         if type(task_output) == v:t_dict
             if task_name == 'test_solution'
-                if task_output['state'] == 'Finished' && 
+                if task_output['state'] == 'Finished' &&
                             \task_output['answer'] != task_output['expected_answer']
                     let task_output['state'] = 'Wrong Answer'
                 endif
@@ -1215,7 +1216,7 @@ function! s:HandleSubmissionsCR() abort
         return
     endif
 
-    let file_name = printf('%s.%s.%s.%s', 
+    let file_name = printf('%s.%s.%s.%s',
                 \ submission['problem_id'],
                 \ s:SlugToFileName(submission['slug']),
                 \ submission_id, s:SolutionFileExt(submission['filetype']))
